@@ -1,4 +1,9 @@
 # DailyLife
+<p align="center">
+    <a href="https://github.com/Yizuka17/DailyLife">
+        <img src="https://socialify.git.ci/Yizuka17/DailyLife/image?font=Source+Code+Pro&forks=1&issues=1&language=1&name=1&owner=1&pattern=Circuit+Board&pulls=1&stargazers=1&theme=Light" alt="DailyLife"/>
+    </a>
+</p>
 
 <p align="center">
     <a href="https://developer.android.com">
