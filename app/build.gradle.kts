@@ -36,7 +36,11 @@ fun Project.loadReleaseSigning(): SigningCredentials? {
     val keyPassword = propertyOrEnv("SIGNING_KEY_PASSWORD")
 
     val resolvedStoreFile = mutableListOf<File>().apply {
-        storeFile?.let { add(file(it)) }
+        storeFile?.let {
+            val configuredFile = rootProject.file(it)
+            add(configuredFile)
+            add(file(it))
+        }
         add(file("keystore.jks"))
         add(file("release/keystore.jks"))
         add(rootProject.file("keystore.jks"))

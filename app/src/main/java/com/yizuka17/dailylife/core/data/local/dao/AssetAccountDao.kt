@@ -44,9 +44,6 @@ interface AssetAccountDao {
     @Query("UPDATE asset_accounts SET balance = balance + :delta WHERE id = :accountId AND isDeleted = 0")
     suspend fun adjustBalance(accountId: Int, delta: Double)
 
-    @Query("UPDATE asset_accounts SET balance = :balance WHERE id = :accountId AND isDeleted = 0")
-    suspend fun setBalance(accountId: Int, balance: Double)
-
     @Query("UPDATE asset_accounts SET isDefault = 0")
     suspend fun clearDefaultAccounts()
 }

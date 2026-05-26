@@ -23,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.QrCode
@@ -90,7 +89,6 @@ fun AssetsScreen(
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
     var editorState by remember { mutableStateOf<AssetAccountEditorState?>(null) }
-    var balanceEditingAccount by remember { mutableStateOf<AssetAccountEntity?>(null) }
     var deleteAccount by remember { mutableStateOf<AssetAccountEntity?>(null) }
 
     LaunchedEffect(Unit) {
@@ -126,7 +124,6 @@ fun AssetsScreen(
                     totalBalance = uiState.totalBalance,
                     accounts = uiState.accounts,
                     onEditAccount = { editorState = AssetAccountEditorState.fromAccount(it) },
-                    onEditBalance = { balanceEditingAccount = it },
                     onDeleteAccount = { deleteAccount = it },
                     onAccountsReordered = viewModel::reorderAccounts,
                 )
@@ -142,17 +139,6 @@ fun AssetsScreen(
             onSave = {
                 viewModel.saveAccount(it)
                 editorState = null
-            },
-        )
-    }
-
-    balanceEditingAccount?.let { account ->
-        BalanceEditorDialog(
-            account = account,
-            onDismiss = { balanceEditingAccount = null },
-            onSave = { balance ->
-                viewModel.updateBalance(account.id, balance)
-                balanceEditingAccount = null
             },
         )
     }
@@ -185,7 +171,6 @@ private fun AssetsContent(
     totalBalance: Double,
     accounts: List<AssetAccountEntity>,
     onEditAccount: (AssetAccountEntity) -> Unit,
-    onEditBalance: (AssetAccountEntity) -> Unit,
     onDeleteAccount: (AssetAccountEntity) -> Unit,
     onAccountsReordered: (List<Int>) -> Unit,
 ) {
@@ -201,8 +186,15 @@ private fun AssetsContent(
     var dragOffset by remember { mutableStateOf(Offset.Zero) }
     val hapticFeedback = LocalHapticFeedback.current
 
-    LaunchedEffect(accounts.map { it.id }) {
+    LaunchedEffect(accounts) {
         if (draggingAccountId == null) {
+            orderedAccounts.clear()
+            orderedAccounts.addAll(accounts)
+        }
+    }
+
+    LaunchedEffect(draggingAccountId, accounts) {
+        if (draggingAccountId == null && orderedAccounts != accounts) {
             orderedAccounts.clear()
             orderedAccounts.addAll(accounts)
         }
@@ -267,7 +259,6 @@ private fun AssetsContent(
             AssetAccountCard(
                 account = account,
                 onEditAccount = { onEditAccount(account) },
-                onEditBalance = { onEditBalance(account) },
                 onDeleteAccount = { onDeleteAccount(account) },
                 modifier = Modifier
                     .animateItem()
@@ -337,7 +328,6 @@ private fun AssetsContent(
             AssetAccountCard(
                 account = draggingAccount,
                 onEditAccount = {},
-                onEditBalance = {},
                 onDeleteAccount = {},
                 modifier = Modifier
                     .zIndex(10f)
@@ -392,7 +382,6 @@ private fun TotalAssetCard(totalBalance: Double) {
 private fun AssetAccountCard(
     account: AssetAccountEntity,
     onEditAccount: () -> Unit,
-    onEditBalance: () -> Unit,
     onDeleteAccount: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -430,9 +419,6 @@ private fun AssetAccountCard(
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                 )
-            }
-            IconButton(onClick = onEditBalance) {
-                Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.asset_edit_balance))
             }
             IconButton(onClick = onEditAccount) {
                 Icon(Icons.Default.AccountBalanceWallet, contentDescription = stringResource(R.string.common_edit))
@@ -533,38 +519,6 @@ private fun AccountEditorDialog(
         },
         confirmButton = {
             TextButton(onClick = { onSave(state) }) {
-                Text(stringResource(R.string.common_confirm))
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.common_cancel))
-            }
-        },
-    )
-}
-
-@Composable
-private fun BalanceEditorDialog(
-    account: AssetAccountEntity,
-    onDismiss: () -> Unit,
-    onSave: (String) -> Unit,
-) {
-    var balance by remember(account.id) { mutableStateOf(account.balance.toString()) }
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.asset_edit_balance)) },
-        text = {
-            OutlinedTextField(
-                value = balance,
-                onValueChange = { balance = it },
-                label = { Text(stringResource(R.string.asset_account_balance)) },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = { onSave(balance) }) {
                 Text(stringResource(R.string.common_confirm))
             }
         },

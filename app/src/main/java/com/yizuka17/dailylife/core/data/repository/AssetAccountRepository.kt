@@ -68,10 +68,6 @@ class AssetAccountRepository @Inject constructor(
         }
     }
 
-    suspend fun setBalance(accountId: Int, balance: Double) {
-        assetAccountDao.setBalance(accountId, balance)
-    }
-
     suspend fun reorderAccounts(accountIds: List<Int>) {
         database.withTransaction {
             val reorderedAccounts = accountIds.mapIndexedNotNull { index, accountId ->

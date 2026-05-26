@@ -96,18 +96,6 @@ class AssetsViewModel @Inject constructor(
         }
     }
 
-    fun updateBalance(accountId: Int, balanceText: String) {
-        viewModelScope.launch {
-            val balance = balanceText.toDoubleOrNull()
-            if (balance == null) {
-                _messages.emit(stringProvider.getString(R.string.asset_error_invalid_balance))
-                return@launch
-            }
-            repository.setBalance(accountId, balance)
-            _messages.emit(stringProvider.getString(R.string.asset_message_balance_updated))
-        }
-    }
-
     fun reorderAccounts(accountIds: List<Int>) {
         viewModelScope.launch {
             repository.reorderAccounts(accountIds)
