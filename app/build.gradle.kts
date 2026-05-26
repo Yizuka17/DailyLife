@@ -12,6 +12,12 @@ data class SigningCredentials(
     val keyPassword: String,
 )
 
+fun releaseApkName(versionName: String): String =
+    sanitizeFileNameCandidate("DailyLife-$versionName-17release") + ".apk"
+
+fun releaseBundleBaseName(versionName: String, versionSuffix: String): String =
+    sanitizeFileNameCandidate("DailyLife-$versionName($versionSuffix)")
+
 fun Project.loadReleaseSigning(): SigningCredentials? {
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
@@ -162,6 +168,38 @@ android {
     }
 }
 
+val targetReleaseApkName = releaseApkName(
+    findProperty("project.app.versionName")?.toString() ?: "0.0.0"
+)
+
+tasks.register("renameReleaseApk") {
+    group = "distribution"
+    description = "Renames the release APK to DailyLife-(version)-17release.apk."
+    doLast {
+        val outputDir = layout.buildDirectory.dir("outputs/apk/release").get().asFile
+        if (!outputDir.exists()) return@doLast
+        val targetFile = outputDir.resolve(targetReleaseApkName)
+        val sourceFile = outputDir
+            .listFiles { file ->
+                file.isFile &&
+                    file.extension.equals("apk", ignoreCase = true) &&
+                    file.name != targetReleaseApkName
+            }
+            ?.sortedByDescending { it.lastModified() }
+            ?.firstOrNull()
+            ?: return@doLast
+
+        if (targetFile.exists()) {
+            targetFile.delete()
+        }
+        sourceFile.renameTo(targetFile)
+    }
+}
+
+tasks.matching { it.name == "assembleRelease" }.configureEach {
+    finalizedBy("renameReleaseApk")
+}
+
 dependencies {
 
 
@@ -245,11 +283,9 @@ tasks.register("printCommitCount") {
 tasks.register("renameReleaseBundle") {
     group = "distribution"
     description = "Renames release APK/AAB artifacts to a unified naming convention."
-    dependsOn("assembleRelease", "bundleRelease")
+    dependsOn("bundleRelease")
     doLast {
-        val baseName = sanitizeFileNameCandidate(
-            "$appNameValue-$versionNameValue($versionSuffix)"
-        )
+        val baseName = releaseBundleBaseName(versionNameValue, versionSuffix)
 
         fun renameArtifacts(directory: File, extension: String) {
             if (!directory.exists()) return

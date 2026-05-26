@@ -77,8 +77,12 @@ fun TransactionDetailsScreen(
                     val transaction = uiState.transaction!!
                     val context = LocalContext.current
                     val configuration = LocalConfiguration.current
-                    val categoryLabel = remember(transaction.category, configuration) {
-                        TransactionCategoryRepository.getDisplayName(context, transaction.category)
+                    val categoryLabel = remember(transaction.category, configuration, uiState.categoryNamesById) {
+                        TransactionCategoryRepository.getDisplayName(
+                            context,
+                            transaction.category,
+                            uiState.categoryNamesById,
+                        )
                     }
                     val iconVector = remember(transaction.category) {
                         TransactionCategoryRepository.getIcon(transaction.category)
@@ -95,6 +99,7 @@ fun TransactionDetailsScreen(
                             )
                         },
                         iconVector = iconVector,
+                        accountName = uiState.accountName,
                     )
 
                     if (showDeleteDialog) {

@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.map
 import java.util.Locale
 import java.util.UUID
@@ -83,6 +84,20 @@ class TransactionCategoryDataRepository @Inject constructor(
         if (transactionCount > 0) return DeleteCategoryResult.HasTransactions(transactionCount)
         categoryDao.deleteCategoryById(categoryId)
         return DeleteCategoryResult.Success
+    }
+
+    suspend fun getCategoriesByIds(ids: List<String>): List<TransactionCategoryEntity> {
+        if (ids.isEmpty()) return emptyList()
+        ensureSeededIfNeeded()
+        return categoryDao.getCategoriesByIds(ids)
+    }
+
+    fun observeCategoryNamesByIds(ids: List<String>): Flow<Map<String, String>> {
+        val distinctIds = ids.distinct()
+        if (distinctIds.isEmpty()) return kotlinx.coroutines.flow.flowOf(emptyMap())
+        return categoryDao.observeCategoriesByIds(distinctIds)
+            .onStart { ensureSeededIfNeeded() }
+            .map { categories -> categories.associate { it.id to it.name } }
     }
 
     suspend fun reorderCategories(categoryIds: List<String>) {

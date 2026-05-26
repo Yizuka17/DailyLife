@@ -117,11 +117,12 @@ fun TransactionListItem(
     transaction: TransactionEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    categoryNamesById: Map<String, String> = emptyMap(),
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val categoryLabel = remember(transaction.category, configuration) {
-        TransactionCategoryRepository.getDisplayName(context, transaction.category)
+    val categoryLabel = remember(transaction.category, configuration, categoryNamesById) {
+        TransactionCategoryRepository.getDisplayName(context, transaction.category, categoryNamesById)
     }
     val categoryIcon = remember(transaction.category) {
         TransactionCategoryRepository.getIcon(transaction.category)

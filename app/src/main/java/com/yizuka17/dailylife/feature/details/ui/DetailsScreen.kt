@@ -246,6 +246,7 @@ private fun DetailsTransactionList(
                         deleteButtonSize = deleteButtonSize,
                         onTransactionClick = onTransactionClick,
                         onDeleteTransaction = onDeleteTransaction,
+                        categoryNamesById = dailyData.categoryNamesById,
                     )
                 }
             }
@@ -273,6 +274,7 @@ private fun SwipeableTransactionRow(
     deleteButtonSize: Dp,
     onTransactionClick: (Int) -> Unit,
     onDeleteTransaction: (TransactionEntity) -> Unit,
+    categoryNamesById: Map<String, String>,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val offsetX = remember { Animatable(0f) }
@@ -356,6 +358,7 @@ private fun SwipeableTransactionRow(
             modifier = Modifier.offset {
                 IntOffset(offsetX.value.roundToInt(), 0)
             },
+            categoryNamesById = categoryNamesById,
         )
     }
 }

@@ -17,6 +17,9 @@ interface AssetAccountDao {
     @Query("SELECT * FROM asset_accounts WHERE id = :id AND isDeleted = 0")
     suspend fun getActiveAccountById(id: Int): AssetAccountEntity?
 
+    @Query("SELECT * FROM asset_accounts WHERE id = :id")
+    suspend fun getAccountById(id: Int): AssetAccountEntity?
+
     @Query("SELECT * FROM asset_accounts WHERE isDeleted = 0 ORDER BY isDefault DESC, sortOrder ASC, id ASC LIMIT 1")
     suspend fun getDefaultActiveAccount(): AssetAccountEntity?
 

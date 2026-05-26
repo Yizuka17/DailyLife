@@ -52,7 +52,8 @@ internal fun CategoryRankingSection(
     amountFormatter: (Double) -> String,
     animationKey: Any?,
     contentStatus: ChartContentStatus,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    categoryNamesById: Map<String, String> = emptyMap(),
 ) {
     val titleRes = if (type == ChartType.Expense) {
         R.string.chart_rank_title_expense
@@ -90,6 +91,7 @@ internal fun CategoryRankingSection(
                             amountFormatter = amountFormatter,
                             percentFormatter = percentFormatter,
                             animationKey = animationKey,
+                            categoryNamesById = categoryNamesById,
                         )
 
                         if (index != ranks.lastIndex) {
@@ -127,12 +129,13 @@ private fun CategoryRankingItem(
     rank: ChartCategoryRank,
     amountFormatter: (Double) -> String,
     percentFormatter: NumberFormat,
-    animationKey: Any?
+    animationKey: Any?,
+    categoryNamesById: Map<String, String>,
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val categoryLabel = remember(rank.category, configuration) {
-        TransactionCategoryRepository.getDisplayName(context, rank.category)
+    val categoryLabel = remember(rank.category, configuration, categoryNamesById) {
+        TransactionCategoryRepository.getDisplayName(context, rank.category, categoryNamesById)
     }
     val icon = remember(rank.category) { TransactionCategoryRepository.getIcon(rank.category) }
     val percentText = remember(rank.ratio) { percentFormatter.format(rank.ratio.toDouble()) }

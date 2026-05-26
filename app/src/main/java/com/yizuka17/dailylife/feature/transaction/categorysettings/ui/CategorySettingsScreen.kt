@@ -239,22 +239,10 @@ private fun CategoryRow(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             Text(
-                text = buildString {
-                    append(
-                        if (category.isBuiltin) {
-                            stringResource(id = R.string.category_settings_builtin_tag)
-                        } else {
-                            stringResource(id = R.string.category_settings_custom_tag)
-                        }
-                    )
-                    append(" 路 ")
-                    append(
-                        if (category.isEnabled) {
-                            stringResource(id = R.string.category_settings_enabled_tag)
-                        } else {
-                            stringResource(id = R.string.category_settings_disabled_tag)
-                        }
-                    )
+                text = if (category.isEnabled) {
+                    stringResource(id = R.string.category_settings_enabled_tag)
+                } else {
+                    stringResource(id = R.string.category_settings_disabled_tag)
                 },
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,

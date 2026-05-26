@@ -347,6 +347,9 @@
     <string name="transaction_details_date_pattern">yyyy年MM月dd日 EEEE</string>
     <string name="transaction_detail_category">分类</string>
     <string name="transaction_detail_time">时间</string>
+    <string name="transaction_detail_expense_account">扣款账户</string>
+    <string name="transaction_detail_income_account">汇入账户</string>
+    <string name="transaction_detail_account_empty">未选择账户</string>
     <string name="transaction_detail_source">来源</string>
     <string name="transaction_detail_source_default">@string/app_name</string>
     <string name="transaction_detail_mood">心情</string>

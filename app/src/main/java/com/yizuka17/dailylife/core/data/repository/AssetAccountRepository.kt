@@ -17,6 +17,8 @@ class AssetAccountRepository @Inject constructor(
 
     suspend fun getAccount(accountId: Int): AssetAccountEntity? = assetAccountDao.getActiveAccountById(accountId)
 
+    suspend fun getAccountIncludingDeleted(accountId: Int): AssetAccountEntity? = assetAccountDao.getAccountById(accountId)
+
     suspend fun createAccount(
         name: String,
         type: AssetAccountType,

@@ -20,6 +20,12 @@ interface TransactionCategoryDao {
     @Query("SELECT * FROM transaction_categories WHERE id = :id LIMIT 1")
     suspend fun getCategoryById(id: String): TransactionCategoryEntity?
 
+    @Query("SELECT * FROM transaction_categories WHERE id IN (:ids)")
+    suspend fun getCategoriesByIds(ids: List<String>): List<TransactionCategoryEntity>
+
+    @Query("SELECT * FROM transaction_categories WHERE id IN (:ids)")
+    fun observeCategoriesByIds(ids: List<String>): Flow<List<TransactionCategoryEntity>>
+
     @Query("SELECT * FROM transaction_categories ORDER BY type ASC, sortOrder ASC, name ASC")
     suspend fun getAllCategoriesSnapshot(): List<TransactionCategoryEntity>
 

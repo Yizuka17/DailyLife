@@ -15,6 +15,7 @@ data class ChartUiState(
     val selectedRangeOption: ChartRangeOption? = null,
     val entries: List<ChartEntry> = emptyList(),
     val categoryRanks: List<ChartCategoryRank> = emptyList(),
+    val categoryNamesById: Map<String, String> = emptyMap(),
     val totalAmount: Double = 0.0,
     val averageAmount: Double = 0.0,
     val moodEntries: List<MoodChartEntry> = emptyList(),

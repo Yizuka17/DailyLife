@@ -6,6 +6,7 @@ import com.yizuka17.dailylife.R
 import com.yizuka17.dailylife.core.data.analytics.TransactionAnalyticsRepository
 import com.yizuka17.dailylife.core.data.analytics.TransactionAnalyticsRepository.MonthlySnapshot
 import com.yizuka17.dailylife.core.data.local.entity.TransactionEntity
+import com.yizuka17.dailylife.core.data.repository.TransactionCategoryDataRepository
 import com.yizuka17.dailylife.core.data.repository.TransactionRepository
 import com.yizuka17.dailylife.core.ui.model.MoodRepository
 import com.yizuka17.dailylife.core.common.StringProvider
@@ -17,6 +18,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -27,6 +31,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val transactionRepository: TransactionRepository,
+    private val categoryRepository: TransactionCategoryDataRepository,
     private val analyticsRepository: TransactionAnalyticsRepository,
     private val stringProvider: StringProvider
 ) : ViewModel() {
@@ -67,27 +72,41 @@ class DetailsViewModel @Inject constructor(
                 analyticsRepository.observeMonthlySnapshot(year, month)
             }
 
-            snapshotFlow.collectLatest { snapshot ->
-                val shouldUpdateCalendar = allowFallback &&
-                    (snapshot.year != year || snapshot.month != month)
-                currentCalendar = if (shouldUpdateCalendar) {
-                    Calendar.getInstance().apply {
-                        clear()
-                        set(Calendar.YEAR, snapshot.year)
-                        set(Calendar.MONTH, snapshot.month)
-                        set(Calendar.DAY_OF_MONTH, 1)
-                    }
-                } else {
-                    calendar
+            snapshotFlow
+                .flatMapLatest { snapshot ->
+                    categoryRepository.observeCategoryNamesByIds(snapshot.categoryIds())
+                        .map { categoryNamesById -> snapshot to categoryNamesById }
+                        .onStart { emit(snapshot to emptyMap()) }
                 }
+                .collectLatest { (snapshot, categoryNamesById) ->
+                    val shouldUpdateCalendar = allowFallback &&
+                        (snapshot.year != year || snapshot.month != month)
+                    currentCalendar = if (shouldUpdateCalendar) {
+                        Calendar.getInstance().apply {
+                            clear()
+                            set(Calendar.YEAR, snapshot.year)
+                            set(Calendar.MONTH, snapshot.month)
+                            set(Calendar.DAY_OF_MONTH, 1)
+                        }
+                    } else {
+                        calendar
+                    }
 
-                _uiState.value = snapshot.toUiState(stringProvider)
-            }
+                    _uiState.value = snapshot.toUiState(stringProvider, categoryNamesById)
+                }
         }
     }
 
+    private fun MonthlySnapshot.categoryIds(): List<String> = days
+        .asSequence()
+        .flatMap { it.transactions.asSequence() }
+        .map { it.category }
+        .distinct()
+        .toList()
+
     private fun MonthlySnapshot.toUiState(
-        stringProvider: StringProvider
+        stringProvider: StringProvider,
+        categoryNamesById: Map<String, String>,
     ): DetailsUiState {
         val dailyTransactions = days.map { snapshot ->
             val moodText = if (snapshot.moodCount > 0) {
@@ -103,7 +122,8 @@ class DetailsViewModel @Inject constructor(
                 transactions = snapshot.transactions,
                 dailyIncome = snapshot.income,
                 dailyExpense = snapshot.expense,
-                dailyMood = moodText
+                dailyMood = moodText,
+                categoryNamesById = categoryNamesById,
             )
         }
 

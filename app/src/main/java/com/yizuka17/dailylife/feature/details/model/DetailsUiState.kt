@@ -9,6 +9,7 @@ data class DailyTransactions(
     val dailyIncome: Double,
     val dailyExpense: Double,
     val dailyMood: String,
+    val categoryNamesById: Map<String, String> = emptyMap(),
 )
 
 data class DetailsUiState(

@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import com.yizuka17.dailylife.R
 import com.yizuka17.dailylife.core.data.local.entity.TransactionEntity
 import com.yizuka17.dailylife.core.ui.model.MoodRepository
-import com.yizuka17.dailylife.core.model.TransactionSource
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -53,6 +52,7 @@ fun TransactionDetailsContent(
     onDelete: () -> Unit,
     onEdit: () -> Unit,
     iconVector: ImageVector,
+    accountName: String?,
 ) {
     Column(
         modifier = Modifier
@@ -67,7 +67,11 @@ fun TransactionDetailsContent(
             iconVector = iconVector,
         )
         Spacer(modifier = Modifier.height(24.dp))
-        TransactionDetailsList(transaction = transaction, categoryLabel = categoryLabel)
+        TransactionDetailsList(
+            transaction = transaction,
+            categoryLabel = categoryLabel,
+            accountName = accountName,
+        )
         Spacer(modifier = Modifier.weight(1f))
         ActionButtons(
             onDelete = onDelete,
@@ -147,7 +151,11 @@ fun TransactionSummaryCard(
 }
 
 @Composable
-fun TransactionDetailsList(transaction: TransactionEntity, categoryLabel: String) {
+fun TransactionDetailsList(
+    transaction: TransactionEntity,
+    categoryLabel: String,
+    accountName: String?,
+) {
     val datePattern = stringResource(R.string.transaction_details_date_pattern)
     val currentLocale = Locale.getDefault()
     val sdf = remember(datePattern, currentLocale) { SimpleDateFormat(datePattern, currentLocale) }
@@ -164,17 +172,15 @@ fun TransactionDetailsList(transaction: TransactionEntity, categoryLabel: String
             value = dateString,
         )
         Divider()
-        val defaultSourceLabel = stringResource(R.string.transaction_detail_source_default)
-        val storedSource = transaction.source.ifBlank { TransactionSource.DEFAULT }
-        val displaySource = if (TransactionSource.isAppSource(storedSource)) {
-            defaultSourceLabel
-        } else {
-            storedSource
-        }
-
         DetailItem(
-            label = stringResource(R.string.transaction_detail_source),
-            value = displaySource,
+            label = stringResource(
+                if (transaction.amount < 0) {
+                    R.string.transaction_detail_expense_account
+                } else {
+                    R.string.transaction_detail_income_account
+                }
+            ),
+            value = accountName ?: stringResource(R.string.transaction_detail_account_empty),
         )
         Divider()
 

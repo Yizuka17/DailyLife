@@ -348,6 +348,9 @@
     <string name="transaction_details_date_pattern">yyyy-MM-dd EEEE</string>
     <string name="transaction_detail_category">Category</string>
     <string name="transaction_detail_time">Time</string>
+    <string name="transaction_detail_expense_account">Debit account</string>
+    <string name="transaction_detail_income_account">Credit account</string>
+    <string name="transaction_detail_account_empty">No account</string>
     <string name="transaction_detail_source">Source</string>
     <string name="transaction_detail_source_default">@string/app_name</string>
     <string name="transaction_detail_mood">Mood</string>

@@ -76,18 +76,25 @@ object TransactionCategoryRepository {
         getIcon(categoryValue)
 
     fun getDisplayName(context: Context, categoryValue: String): String =
-        TransactionCategoryType.fromValue(categoryValue)
-            ?.let { type -> context.getString(type.labelRes) }
+        getDisplayName(context, categoryValue, emptyMap())
+
+    fun getDisplayName(
+        context: Context,
+        categoryValue: String,
+        categoryNamesById: Map<String, String>,
+    ): String =
+        categoryNamesById[categoryValue]
+            ?: TransactionCategoryType.fromValue(categoryValue)
+                ?.let { type -> context.getString(type.labelRes) }
             ?: categoryValue
 
     fun normalizeCategoryId(rawValue: String): String =
         TransactionCategoryType.fromValue(rawValue)?.id ?: rawValue
 
     fun TransactionCategoryEntity.toUiModel(context: Context): TransactionCategory {
-        val builtinType = TransactionCategoryType.fromValue(id)
         return TransactionCategory(
             id = id,
-            name = if (isBuiltin && builtinType != null) context.getString(builtinType.labelRes) else name,
+            name = name,
             icon = iconFromKey(iconKey),
             isBuiltin = isBuiltin,
             isEnabled = !isDeleted,

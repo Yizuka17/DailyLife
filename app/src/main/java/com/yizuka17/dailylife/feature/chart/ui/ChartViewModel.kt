@@ -6,6 +6,7 @@ import com.yizuka17.dailylife.core.data.analytics.TransactionAnalyticsRepository
 import com.yizuka17.dailylife.core.data.analytics.TransactionAnalyticsRepository.ChartAnalyticsCache
 import com.yizuka17.dailylife.core.data.analytics.TransactionAnalyticsRepository.ChartSummaryKey
 import com.yizuka17.dailylife.core.data.analytics.TransactionAnalyticsRepository.ChartSummarySnapshot
+import com.yizuka17.dailylife.core.data.repository.TransactionCategoryDataRepository
 import com.yizuka17.dailylife.core.ui.model.ChartContentStatus
 import com.yizuka17.dailylife.core.domain.chart.model.ChartPeriod
 import com.yizuka17.dailylife.core.domain.chart.model.ChartRangeOption
@@ -18,12 +19,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 
 @HiltViewModel
 class ChartViewModel @Inject constructor(
-    analyticsRepository: TransactionAnalyticsRepository
+    analyticsRepository: TransactionAnalyticsRepository,
+    private val categoryRepository: TransactionCategoryDataRepository,
 ) : ViewModel() {
 
     private val chartCacheFlow = analyticsRepository.chartCache()
@@ -56,12 +61,17 @@ class ChartViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<ChartUiState> = selectionState
         .mapLatest { selection ->
-            buildUiState(
+            selection to buildUiState(
                 cache = selection.cache,
                 type = selection.type,
                 period = selection.period,
                 preferredRangeId = selection.preferredRangeId
             )
+        }
+        .flatMapLatest { (_, state) ->
+            categoryRepository.observeCategoryNamesByIds(state.categoryRanks.map { it.category })
+                .map { categoryNamesById -> state.copy(categoryNamesById = categoryNamesById) }
+                .onStart { emit(state) }
         }
         .stateIn(
             scope = viewModelScope,

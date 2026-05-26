@@ -4,7 +4,10 @@
         <img src="https://socialify.git.ci/Yizuka17/DailyLife/image?font=Source+Code+Pro&forks=1&issues=1&language=1&name=1&owner=1&pattern=Circuit+Board&pulls=1&stargazers=1&theme=Light" alt="DailyLife"/>
     </a>
 </p>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 735ff89 (Fix category labels and release artifact naming)
 <p align="center">
     <a href="https://developer.android.com">
         <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform Android"/>

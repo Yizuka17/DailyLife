@@ -217,6 +217,7 @@ fun ChartScreen(
                         amountFormatter = formatAmount,
                         animationKey = barAnimationTrigger,
                         contentStatus = contentStatus,
+                        categoryNamesById = uiState.categoryNamesById,
                     )
                 }
 

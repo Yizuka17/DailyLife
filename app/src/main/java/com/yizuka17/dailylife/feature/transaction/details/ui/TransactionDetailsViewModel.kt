@@ -4,6 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.yizuka17.dailylife.core.data.local.entity.TransactionEntity
+import com.yizuka17.dailylife.core.data.repository.AssetAccountRepository
+import com.yizuka17.dailylife.core.data.repository.TransactionCategoryDataRepository
 import com.yizuka17.dailylife.core.data.repository.TransactionRepository
 import com.yizuka17.dailylife.feature.transaction.details.model.TransactionDetailsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +22,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TransactionDetailsViewModel @Inject constructor(
     private val repository: TransactionRepository,
+    private val categoryRepository: TransactionCategoryDataRepository,
+    private val accountRepository: AssetAccountRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -39,7 +43,14 @@ class TransactionDetailsViewModel @Inject constructor(
         detailsJob = viewModelScope.launch {
             repository.getTransactionById(transactionId).collectLatest { transaction ->
                 if (transaction != null) {
-                    _uiState.value = TransactionDetailsUiState(transaction = transaction, isLoading = false)
+                    val categoryNamesById = loadCategoryName(transaction.category)
+                    val accountName = loadAccountName(transaction.accountId)
+                    _uiState.value = TransactionDetailsUiState(
+                        transaction = transaction,
+                        categoryNamesById = categoryNamesById,
+                        accountName = accountName,
+                        isLoading = false,
+                    )
                 } else {
                     if (_uiState.value.transaction != null) {
                         _uiState.value = TransactionDetailsUiState(error = "Transaction not found", isLoading = false)
@@ -47,6 +58,15 @@ class TransactionDetailsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private suspend fun loadCategoryName(categoryId: String): Map<String, String> {
+        return categoryRepository.getCategoriesByIds(listOf(categoryId))
+            .associate { it.id to it.name }
+    }
+
+    private suspend fun loadAccountName(accountId: Int?): String? {
+        return accountId?.let { id -> accountRepository.getAccountIncludingDeleted(id)?.name }
     }
 
     fun deleteTransaction(transaction: TransactionEntity, onDeleted: () -> Unit) {
