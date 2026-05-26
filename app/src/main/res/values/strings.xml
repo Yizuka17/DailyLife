@@ -7,6 +7,7 @@
 
     <!-- Navigation -->
     <string name="details">Details</string>
+    <string name="assets">Assets</string>
     <string name="chart">Chart</string>
     <string name="discover">Discover</string>
     <string name="me">Me</string>
@@ -57,24 +58,18 @@
     <string name="chart_type_profile_ratio">Expense ratio %1$s · Income ratio %2$s</string>
     <string name="chart_type_profile_empty">No records for this period</string>
     <string name="discover_type_profile_title_month">Profile for month %1$d</string>
+    <string name="discover_type_profile_title_year">Profile for %1$d</string>
     <string name="discover_type_profile_balance_label">Balance:</string>
     <string name="discover_type_profile_month_label">%1$d-%2$02d</string>
     <string name="discover_type_profile_subtitle">Overview of this month\'s records</string>
     <string name="discover_type_profile_month_expense">Expenses this month</string>
     <string name="discover_type_profile_month_income">Income this month</string>
+    <string name="discover_type_profile_year_expense">Expenses this year</string>
+    <string name="discover_type_profile_year_income">Income this year</string>
     <string name="discover_type_profile_expense_ratio_label">Expense ratio</string>
-    <string name="discover_ai_title">AI financial assistant</string>
-    <string name="discover_ai_subtitle">Insights, budget planning, and smart reminders are coming soon</string>
-    <string name="discover_ai_card_title">Smart features coming soon</string>
-    <string name="discover_ai_chip_insight">Trend analysis</string>
-    <string name="discover_ai_chip_plan">Budget planning</string>
-    <string name="discover_ai_chip_alert">Bill alerts</string>
-    <string name="discover_ai_toast">In development…</string>
     <string name="discover_common_tools_title">Popular finance tools</string>
     <string name="discover_common_tool_mortgage_title">Mortgage calculator</string>
     <string name="discover_common_tool_fx_title">Currency converter</string>
-    <string name="discover_common_tool_check_title">Check archive</string>
-    <string name="discover_common_tool_budget_title">Asset planning</string>
     <string name="mortgage_calculator_back">Back</string>
     <string name="mortgage_calculator_currency_symbol">¥</string>
     <string name="mortgage_calculator_inputs_title">Loan inputs</string>
@@ -131,10 +126,8 @@
     <string name="dynamic_color_switcher_sub">Apply wallpaper colors to the theme</string>
     <string name="theme_mode_switcher_text">Theme mode</string>
     <string name="general_settings">General settings</string>
+    <string name="user_profile_settings">User settings</string>
     <string name="accounting_preferences">Accounting preferences</string>
-    <string name="quick_usage_section_shortcuts">Quick shortcuts</string>
-    <string name="quick_usage_widget_title">Home screen widget</string>
-    <string name="quick_usage_widget_sub">Pin quick actions to your launcher (coming soon)</string>
     <string name="quick_usage_section_reminder">Reminders</string>
     <string name="quick_usage_reminder_title">Scheduled reminder</string>
     <string name="quick_usage_reminder_summary_on">Daily reminder at %1$s to log your transactions</string>
@@ -224,13 +217,13 @@
     <string name="data_management_restore_password_placeholder">Password (if encrypted)</string>
     <string name="data_management_restore_help">Restoring merges transactions and applies preferences when present.</string>
     <string name="data_management_restore_button">Restore backup</string>
-    <string name="data_management_create_file_name">DailyLife-%1$s.dlbackup</string>
+    <string name="data_management_create_file_name">Ribook-%1$s.dlbackup</string>
     <string name="me_other_section_title">More</string>
     <string name="me_about_author">About the author</string>
     <string name="me_share_app">Share the app</string>
     <string name="me_more_info">More information</string>
     <string name="me_open_source_repository">Open source repository</string>
-    <string name="me_share_app_message">I\'m using DailyLife to track life and finances. Give it a try!</string>
+    <string name="me_share_app_message">I’m using DailyLife to track life and finances. Give it a try!</string>
     <string name="me_share_app_unavailable">No share target available</string>
     <string name="me_about_app_tagline">Track your days, understand your money.</string>
     <string name="me_about_app_highlights_title">Highlights</string>
@@ -246,7 +239,7 @@
     <string name="me_about_app_support_description">Feedback and feature ideas keep the app improving. Reach out anytime by email or GitHub issues.</string>
     <string name="me_about_app_support_action">Report via GitHub Issues</string>
     <string name="me_about_app_support_footer">We reply in 1–2 business days and review every suggestion carefully.</string>
-    <string name="me_about_author_intro">Hi, I\'m Evening, a designer and Android developer. DailyLife is my attempt at a simple, beautiful, and trustworthy bookkeeping experience.</string>
+    <string name="me_about_author_intro">Hi, I’m Evening, a designer and Android developer. DailyLife is my attempt at a simple, beautiful, and trustworthy bookkeeping experience.</string>
     <string name="me_about_author_role">Mobile Developer · Android enthusiast</string>
     <string name="me_about_author_recent_title">Currently working on</string>
     <string name="me_about_author_recent_item_1">Refining bookkeeping and analytics interactions</string>
@@ -260,12 +253,26 @@
     <string name="me_about_author_contact_site_label">Website</string>
     <string name="me_about_author_contact_site_value">evening.dev</string>
     <string name="me_about_author_footer">Thank you for using DailyLife. May it help you live with discipline and calm.</string>
+    <string name="me_about_author_page_current_hint">Current maintainer · Swipe left to view original author</string>
+    <string name="me_about_author_page_original_hint">Original author · Swipe right to return</string>
+    <string name="me_about_author_current_bio_empty">This profile does not have a GitHub bio yet.</string>
+    <string name="me_about_author_current_profile_title">Links</string>
+    <string name="me_about_author_current_twitter_label">X / Twitter</string>
 
     <!-- Me profile -->
     <string name="me_profile_display_name">Evening</string>
     <string name="me_profile_id">ID: dailylife_001</string>
     <string name="me_profile_signature">The young need no utopia; when the heart looks far ahead, the road grows clear.</string>
     <string name="me_profile_avatar_content_description">Profile avatar</string>
+    <string name="me_profile_edit_avatar_title">Edit avatar</string>
+    <string name="me_profile_avatar_customized">Custom avatar</string>
+    <string name="me_profile_avatar_default">Default avatar</string>
+    <string name="me_profile_edit_nickname_title">Edit nickname</string>
+    <string name="me_profile_nickname_label">Nickname</string>
+    <string name="me_profile_edit_signature_title">Edit signature</string>
+    <string name="me_profile_signature_label">Signature</string>
+    <string name="me_profile_avatar_crop_title">Adjust avatar</string>
+    <string name="me_profile_avatar_crop_tip">Drag to reposition and pinch to zoom. The circular preview is exactly how your avatar will appear.</string>
     <string name="me_profile_stat_streak">Current streak</string>
     <string name="me_profile_stat_total_days">Total days tracked</string>
     <string name="me_profile_stat_total_transactions">Total entries logged</string>
@@ -295,6 +302,31 @@
     <string name="editor_tab_income">Income</string>
     <string name="editor_category_settings">Settings</string>
     <string name="editor_toast_category_settings">Go to category settings</string>
+    <string name="category_settings_title">Category settings</string>
+    <string name="category_settings_manage_section">Manage categories</string>
+    <string name="category_settings_manage_tip">Add custom categories, rename categories, enable or disable categories shown in the editor. Long-press a custom category to delete it.</string>
+    <string name="category_settings_add">Add</string>
+    <string name="category_settings_add_dialog_title">Add category</string>
+    <string name="category_settings_rename_dialog_title">Rename category</string>
+    <string name="category_settings_name_label">Category name</string>
+    <string name="category_settings_delete_dialog_title">Delete category?</string>
+    <string name="category_settings_delete_dialog_message">Delete custom category “%1$s”? Categories already used by transactions cannot be deleted.</string>
+    <string name="category_settings_builtin_tag">Built-in</string>
+    <string name="category_settings_custom_tag">Custom</string>
+    <string name="category_settings_enabled_tag">Enabled</string>
+    <string name="category_settings_disabled_tag">Disabled</string>
+    <string name="category_settings_message_added">Category added</string>
+    <string name="category_settings_message_renamed">Category renamed</string>
+    <string name="category_settings_message_deleted">Category deleted</string>
+    <string name="category_settings_message_enabled">Category enabled</string>
+    <string name="category_settings_message_disabled">Category disabled</string>
+    <string name="category_settings_error_name_empty">Enter a category name</string>
+    <string name="category_settings_error_not_found">Category not found</string>
+    <string name="category_settings_error_builtin_delete">Built-in categories can only be enabled or disabled.</string>
+    <string name="category_settings_error_has_transactions">This category has %1$d transactions, so it cannot be deleted.</string>
+    <string name="category_settings_error_disable_has_transactions">This category has %1$d transactions, so it cannot be disabled.</string>
+    <string name="category_settings_expense_section">Expense categories</string>
+    <string name="category_settings_income_section">Income categories</string>
     <string name="editor_remark_length_warning">Notes can contain at most %1$d characters</string>
     <string name="editor_remark_hint_optional">Note (optional)</string>
     <string name="editor_mood_select">Select mood</string>
@@ -302,6 +334,7 @@
     <string name="editor_action_done">Done</string>
     <string name="editor_error_invalid_amount">Enter a valid amount</string>
     <string name="editor_error_select_category">Please choose a category</string>
+    <string name="editor_error_select_account">Please choose an account</string>
     <string name="editor_error_save_failed">Save failed. Please try again later.</string>
 
     <!-- Calendar -->
@@ -320,6 +353,31 @@
     <string name="transaction_detail_mood">Mood</string>
     <string name="transaction_detail_note">Note</string>
     <string name="transaction_detail_note_empty">None</string>
+
+    <!-- Assets -->
+    <string name="asset_title">Assets</string>
+    <string name="asset_total_balance">Total assets</string>
+    <string name="asset_add_account">Add account</string>
+    <string name="asset_edit_account">Edit account</string>
+    <string name="asset_edit_balance">Edit balance</string>
+    <string name="asset_account_name">Account name</string>
+    <string name="asset_account_balance">Balance</string>
+    <string name="asset_set_default">Set as default account</string>
+    <string name="asset_default_tag">Default</string>
+    <string name="asset_type_bank_card">Bank card</string>
+    <string name="asset_type_cash">Cash</string>
+    <string name="asset_type_alipay">Alipay</string>
+    <string name="asset_type_wechat">WeChat</string>
+    <string name="asset_type_other">Other</string>
+    <string name="asset_delete_dialog_title">Delete account?</string>
+    <string name="asset_delete_dialog_message">Delete “%1$s”? Historical transactions will keep their records, but this account will no longer be shown.</string>
+    <string name="asset_message_saved">Account saved</string>
+    <string name="asset_message_deleted">Account deleted</string>
+    <string name="asset_message_balance_updated">Balance updated</string>
+    <string name="asset_error_load_failed">Failed to load accounts</string>
+    <string name="asset_error_name_empty">Enter an account name</string>
+    <string name="asset_error_invalid_balance">Enter a valid balance</string>
+    <string name="asset_error_save_failed">Failed to save account</string>
 
     <!-- Errors -->
     <string name="error_load_failed">Failed to load</string>
@@ -375,17 +433,4 @@
     <string name="category_finance">Investing</string>
     <string name="category_cash_gift_income">Giftcash</string>
 
-    <!-- Widget -->
-    <string name="widget_loading">Loading…</string>
-    <string name="widget_title_today">Today</string>
-    <string name="widget_total_expense">Expense</string>
-    <string name="widget_total_income">Income</string>
-    <string name="widget_total_balance">Net</string>
-    <string name="widget_last_transaction">Last %1$s · %2$s</string>
-    <string name="widget_last_transaction_empty">No transactions yet</string>
-    <string name="widget_quick_add">Quick log</string>
-    <string name="widget_top_categories">Frequent categories</string>
-    <string name="widget_action_open_app">Open app</string>
-    <string name="widget_action_add_income">Add income</string>
-    <string name="widget_action_add_expense">Add expense</string>
 </resources>

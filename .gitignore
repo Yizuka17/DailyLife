@@ -7,6 +7,8 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/appInsightsSettings.xml
+/.idea/codeStyles/
 .DS_Store
 /build
 /app/release
@@ -15,6 +17,9 @@
 .cxx
 local.properties
 AGENTS.md
+TODO.md
 *.jks
 *.keystore
 keystore.properties
+/.continue/
+/suggestion

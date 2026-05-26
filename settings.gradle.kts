@@ -11,5 +11,5 @@ plugins {
 }
 
 
-rootProject.name = "日子记账"
+rootProject.name = "日簿记"
 include(":app")

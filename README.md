@@ -1,12 +1,5 @@
 # DailyLife
 
-
-<p align="center">
-    <a href="https://github.com/Evening-01/DailyLife">
-        <img src="https://socialify.git.ci/Evening-01/DailyLife/image?font=Source+Code+Pro&forks=1&issues=1&language=1&name=1&owner=1&pattern=Circuit+Board&pulls=1&stargazers=1&theme=Light" alt="socialify"/>
-    </a>
-</p>
-
 <p align="center">
     <a href="https://developer.android.com">
         <img src="https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white" alt="Platform Android"/>
@@ -17,150 +10,81 @@
     <a href="https://developer.android.com/jetpack/compose">
         <img src="https://img.shields.io/badge/Jetpack%20Compose-Material%203-4285F4?logo=jetpackcompose&logoColor=white" alt="Jetpack Compose"/>
     </a>
-    <a href="https://developer.android.com/about/versions/marshmallow">
-        <img src="https://img.shields.io/badge/Min%20SDK-23-34A853?logo=android&logoColor=white" alt="Min SDK 23"/>
-    </a>
     <a href="LICENSE">
         <img src="https://img.shields.io/badge/License-CNC--1.0-6B7280" alt="License CNC-1.0"/>
-    </a>
-    <a href="https://t.me/+KG8tO-8xWmJjYWFl">
-        <img src="https://img.shields.io/badge/Telegram-Join%20Chat-26A5E4?logo=telegram&logoColor=white" alt="Telegram"/>
-    </a>
-    <a href="https://t.me/EveningDailyLifeCI">
-        <img src="https://img.shields.io/badge/Telegram-Channel-26A5E4?logo=telegram&logoColor=white" alt="Telegram Channel"/>
-    </a>
-    <a href="https://qm.qq.com/q/kNwBlpbH3y">
-        <img src="https://img.shields.io/badge/QQ%20Group-957757867-12B7F5?logo=tencentqq&logoColor=white" alt="QQ Group"/>
     </a>
 </p>
 
 > Languages: English | [简体中文](README.zh-CN.md)
 
-DailyLife is a Jetpack Compose personal finance app that helps you record transactions, understand spending patterns, and stay on top of daily habits. It ships with a Material 3 design system, offline-first storage, rich analytics, and productivity tools such as widget shortcuts, biometric protection, and mortgage & currency calculators.
+DailyLife is a Jetpack Compose personal finance app for recording daily income and expenses, viewing statistics, managing accounts, and backing up local data.
 
-This project is also the author's finance-related graduation design, aiming to put three years of Android knowledge into practice by building a complete, modern application. It also serves as a portfolio project for job seeking.
+This repository is maintained at: https://github.com/Yizuka17/DailyLife
 
-If you like this project, please click the ⭐ Star in the top-right corner on GitHub to support my continued development in my spare time.
-
-## Table of Contents
-- [Features](#features)
-- [Screenshots](#screenshots)
-- [Architecture](#architecture)
-- [Tech Stack](#tech-stack)
-- [Module Overview](#module-overview)
-- [Getting Started](#getting-started)
-- [Development Tasks](#development-tasks)
-- [Quality Guidelines](#quality-guidelines)
-- [Internationalization](#internationalization)
-- [Contributing](#contributing)
-- [License](#license)
+Original upstream repository: https://github.com/Evening-01/DailyLife
 
 ## Features
-- Transaction ledger with fast add/edit flows, category presets, mood tracking, and soft-delete support.
-- Home feed that summarizes the month, groups daily activity, and surfaces quick navigation targets.
-- Interactive analytics with expense/income charts, category rankings, and mood correlation timelines.
-- Discover hub featuring a spending type profile, AI preview section, mortgage amortization calculator, and manual currency conversion tool with rate inversion and quick swapping.
-- “Me” area containing biometric lock settings, theme & typography controls, usage streak insights, and a full data backup/restore workflow.
-- Glance-powered home screen widget offering at-a-glance totals, recent activity, and quick-add transaction actions.
-- Room-backed offline database with state flows for live updates and background pruning of archived items.
-- Dynamic themes, custom fonts, large UI scale options, and automatic adaptive icons when dynamic color is enabled.
 
-## Screenshots
-You can [**click here**](images/) to navigate to the `images` directory and view all screenshots.
-
-## Architecture
-DailyLife follows a modular, layered structure built around MVVM and unidirectional data flow:
-- **Compose-first UI**: Screens are pure `@Composable` functions with state hoisted to view models and backed by `StateFlow`.
-- **Feature segregation**: Each domain (home, transactions, details, charts, discover, mortgage, currency, profile) lives under `feature/<area>` with its own UI, view models, and internal models.
-- **Shared foundation**: The `core` package houses design system primitives, dependency injection modules, Room entities/DAOs, FastKV-backed preferences, analytics caching, and utility helpers.
-- **Navigation orchestration**: `app/.../navigation` defines the top-level graph and routes, while feature graphs compose into `HomeScreen`.
-- **Long-lived analytics cache**: `TransactionAnalyticsRepository` aggregates transaction data once and fans out snapshots to charts, discover cards, profile stats, and widgets.
-- **Safe background work**: Repository operations run on injected coroutine scopes (`@ApplicationScope`), keeping UI reactive without leaking activities.
-
-```text
-app/src/main/java/com/evening/dailylife/
-├── app/                # Application entry points, navigation, widget host
-├── core/               # Shared data layer, DI, design system, utilities
-└── feature/            # Screen-specific flows (chart, currency, details, discover, home, me, mortgage, transaction)
-```
+- Transaction add/edit flow with categories, notes, mood, account binding, and soft delete.
+- Monthly overview, transaction details, charts, category rankings, and mood trend analysis.
+- Asset account management with balances, account types, default account, and sorting.
+- Custom categories for expense/income records.
+- Personalization: theme mode, dynamic color, font scale, custom font, language, profile name/signature/avatar.
+- Data management: backup and restore transactions, categories, accounts, preferences, reminders, and avatar image data.
+- Extra tools: mortgage calculator and currency converter.
 
 ## Tech Stack
-- Kotlin 2.1 + Coroutines + Flow
-- Jetpack Compose (Material 3, Navigation, Glance App Widgets)
-- Hilt for dependency injection
-- Room for local persistence
-- FastKV for preferences & feature flags
-- AndroidX Biometric for fingerprint lock
-- Material Kolor & custom theming utilities
-- Min SDK 23, Target/Compile SDK 35, JVM target 17
 
-## Module Overview
-| Area | Path | Highlights |
-| --- | --- | --- |
-| Application shell | `app/src/main/java/com/evening/dailylife/app` | `MainActivity`, Hilt `DailyLifeApplication`, navigation graph, app widget host |
-| Core foundation | `app/src/main/java/com/evening/dailylife/core` | Room database, repositories, analytics cache, design tokens, biometric manager, DI modules |
-| Home feed | `feature/home` | Monthly overview, daily grouping, quick navigation targets |
-| Transaction flow | `feature/transaction` | Add/edit screens, validation, mood picker, repository wiring |
-| Details | `feature/details` | Monthly breakdown, daily sections, transaction list, date filtering |
-| Analytics | `feature/chart` | Range builders, income/expense charts, mood trend visualization |
-| Discover hub | `feature/discover` | Type profile, AI teaser, tool entry points |
-| Currency tools | `feature/currency` | Manual converter, rate inversion, quick swap |
-| Mortgage tools | `feature/mortgage` | Equal principal/interest calculators, amortization views |
-| Personalization | `feature/me` | Fingerprint lock toggle, theme/typography controls, usage stats, backup/restore |
+- Kotlin 2.1
+- Jetpack Compose + Material 3
+- Hilt
+- Room
+- Coroutines + Flow
+- FastKV
+- AndroidX Biometric
+- Min SDK 26 / Target SDK 35
 
-## Getting Started
-1. **Prerequisites**
-   - Android Studio Ladybug (2024.2) or newer
-   - JDK 17
-   - Android SDK Platform 35 and build tools installed
-2. **Clone**
-   ```bash
-   git clone https://github.com/your-org/DailyLife.git
-   cd DailyLife
-   ```
-3. **Local configuration**
-   - Ensure `local.properties` points to your Android SDK (`sdk.dir=...`).
-   - Optional: define release signing variables (`SIGNING_STORE_FILE`, `SIGNING_STORE_PASSWORD`, `SIGNING_KEY_ALIAS`, `SIGNING_KEY_PASSWORD`) in `local.properties` or environment variables if you plan to build release artifacts.
-4. **Sync & build**
-   - Open the project in Android Studio and sync Gradle, or run `./gradlew assembleDebug` from the terminal.
-5. **Run**
-   - Deploy `app` to an emulator or device running Android 6.0 (API 23) or later.
+## Project Structure
 
-## Development Tasks
-- Build debug artifact: `./gradlew assembleDebug`
-- JVM unit tests: `./gradlew test`
-- Instrumentation & Compose UI tests: `./gradlew connectedDebugAndroidTest`
-- Static analysis: `./gradlew lint`
-- Clean build outputs: `./gradlew clean`
-- Utility tasks for CI/distribution:
-  - `./gradlew printAppName`
-  - `./gradlew printVersionName`
-  - `./gradlew printCommitCount`
-  - `./gradlew renameReleaseBundle`
+```text
+app/src/main/java/com/yizuka17/dailylife/
+├── app/        # Application entry, main activity, navigation
+├── core/       # Database, repositories, preferences, DI, design system, utilities
+└── feature/    # Feature modules: home, transaction, chart, assets, me, etc.
+```
 
-## Quality Guidelines
-- Kotlin code style: 4-space indentation, no wildcard imports, trailing commas on multiline argument lists.
-- Compose components must keep state hoisted; prefer pure composables plus view models injected by Hilt.
-- Add unit tests beside the package under `app/src/test`; put Compose/UI automation in `app/src/androidTest`.
-- Update dependency versions via `gradle/sweet-dependency/sweet-dependency-config.yaml`; avoid hardcoding versions in Gradle scripts.
-- Run unit tests and `lint` before submitting a pull request; execute `connectedDebugAndroidTest` for navigation or UI-affecting changes.
+## Build
 
-## Internationalization
-- English and Simplified Chinese (`values-zh-rCN`) resources ship by default.
-- `LanguagePreferencesRepository` exposes language overrides if you need to add more locales.
-- All user-facing strings belong in `app/src/main/res/values/strings.xml`; keep parity with translated files when adding new text.
+1. Clone the repository:
 
-## Contributing
-1. Fork the repository and create a topic branch from `main`.
-2. Make changes, keeping commits atomic and following the `{Action} {index}.` message convention (e.g., `Add 1. Implement mortgage calculator cache.`).
-3. Run `./gradlew test lint` (and `connectedDebugAndroidTest` when UI changes) before opening a pull request.
-4. Include a short summary, screenshots/GIFs for visual tweaks, and a list of validation commands in the PR description.
+```bash
+ git clone https://github.com/Yizuka17/DailyLife.git
+ cd DailyLife
+```
 
-Bug reports and feature requests are welcome through GitHub Issues. Please attach logs or reproduction steps where possible.
+2. Open with Android Studio, or build from terminal:
+
+```bash
+ ./gradlew assembleDebug
+```
+
+3. Optional release signing:
+   - Copy `keystore.properties.example` to `keystore.properties`.
+   - Fill in your signing configuration.
+
+## Useful Commands
+
+```bash
+./gradlew assembleDebug
+./gradlew test
+./gradlew lint
+./gradlew clean
+```
+
+## Screenshots
+
+Screenshots can be placed in the [`images`](images/) directory.
 
 ## License
-DailyLife is distributed under the [Cooperative Non-Commercial License v1.0 (CNC-1.0)](LICENSE).
-- Free to use, modify, and share for non-commercial purposes.
-- Derivatives must keep the same license and provide full source code with attribution to DailyLife contributors.
-- Commercial use, venture-backed usage, or deployments by corporations with annual revenue over $1M USD require prior written approval.
-For commercial licensing inquiries, contact the DailyLife maintainers.
+
+This project is licensed under the [Cooperative Non-Commercial License v1.0](LICENSE).

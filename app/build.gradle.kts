@@ -19,8 +19,16 @@ fun Project.loadReleaseSigning(): SigningCredentials? {
         localPropertiesFile.inputStream().use(localProperties::load)
     }
 
+    val keystoreProperties = Properties()
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use(keystoreProperties::load)
+    }
+
     fun propertyOrEnv(name: String): String? =
-        localProperties.getProperty(name)?.takeIf { it.isNotBlank() } ?: System.getenv(name)?.takeIf { it.isNotBlank() }
+        keystoreProperties.getProperty(name)?.takeIf { it.isNotBlank() }
+            ?: localProperties.getProperty(name)?.takeIf { it.isNotBlank() }
+            ?: System.getenv(name)?.takeIf { it.isNotBlank() }
 
     val storeFile = propertyOrEnv("SIGNING_STORE_FILE")
     val storePassword = propertyOrEnv("SIGNING_STORE_PASSWORD")
@@ -175,8 +183,6 @@ dependencies {
     implementation(com.google.code.gson.gson)
     implementation(androidx.core.core.splashscreen)
     implementation(io.github.billywei01.fastkv)
-    implementation(androidx.glance.glance.appwidget)
-    implementation(androidx.glance.glance.material3)
 
     implementation(com.google.dagger.hilt.android)
     implementation(androidx.hilt.hilt.navigation.compose)
